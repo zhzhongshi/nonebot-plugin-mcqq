@@ -1,0 +1,4 @@
+name: Msg_QQ
+version: '${project.version}'
+main: com.scareye.msg_qq.Msg_QQ
+api-version: 1.18
