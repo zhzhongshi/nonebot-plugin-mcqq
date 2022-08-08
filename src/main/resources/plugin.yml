@@ -1,6 +1,7 @@
 name: MC_QQ
 version: '${project.version}'
 main: com.scareye.mc_qq.MC_QQ
+# 版本仅供参考，自行编译请修改版本号
 api-version: 1.18
 authors: [ 17TheWord ]
 description: 基于NoneBot的与Minecraft Server互通消息的插件
