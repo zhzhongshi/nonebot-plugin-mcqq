@@ -1,55 +1,51 @@
-[![nonebot-plugin-mcqq](https://socialify.git.ci/17TheWord/nonebot-plugin-mcqq/image?description=1&font=Inter&forks=1&issues=1&language=1&logo=https%3A%2F%2Favatars.githubusercontent.com%2F17TheWord&owner=1&pattern=Plus&stargazers=1&theme=Dark)](https://17theword.github.io/mc_qq/)
+# MC_QQ 数据库版本 测试版
 
-# NoneBot-Plugin-MCQQ
+> 提示： 该版本没有经过充分测试, 不建议在生产环境使用, 如果发现任何问题请自行解决，  
+> 或  
+> 提交 [Issues](https://github.com/17TheWord/nonebot-plugin-mcqq/issues) （因个人能力有限不保证百分百解决）。
 
-基于 `NoneBot` 的与 `Minecraft Server` 互通消息插件
+在原有功能上加入了动态数据
 
-- 支持QQ群、QQ频道
-- 支持多个服务器与多个群聊的互通
+## 改动
 
-# 文档
+使用 `tortoise-orm` 及 `sqlite` 数据库存储数据
 
-- [正在不断更新的文档](https://17theword.github.io/mc_qq/)
+数据库参考 [`HarukaBot`](https://github.com/SK-415/HarukaBot)
 
-# 支持的服务端列表
+数据库文件会在 `Bot` 的 `src` 目录下生成，名为 `mcqq.sqlite3`
 
-- Spigot
-  - `MC_QQ_Spigot_XXX.jar` + `nonebot-plugin-mcqq`
-  - `MC_QQ_Spigot_XXX.jar` + `nonebot-plugin-mcqq-mcrcon`
-- MinecraftServer
-  -  `MC_QQ_Minecraft_Server` + `nonebot-plugin-mcqq-mcrcon`
-- ForgeServer
-  -  `MC_QQ_Minecraft_Server` + `nonebot-plugin-mcqq-mcrcon`
-- Fabric
-  -  `MC_QQ_Minecraft_Server` + `nonebot-plugin-mcqq-mcrcon`
+## 安装
 
-# 功能
+注意！若使用该版本，请务必对各个MC服务器设置**不同**的服务器名，即使只有一个MC服务器
 
-- 推送消息列表
-  - 服务器 -> QQ
-    - [x] 加入 / 离开 服务器消息
-    - [x] 玩家聊天信息
-    - [x] 玩家死亡信息（死亡信息为英文，计划使用翻译解决。非插件服务端不适用。）
-  - QQ -> 服务器
-    - [x] 指令（`nonebot-plugin-mcqq-mcrcon` 可用）
-    - [x] 群员聊天文本
-    - [x] 图片、视频等内容转换为 `[图片]`、`[视频]`
+手动下载该分支 `git` 文件，将 `mcqq_sql` 放入 `Bot` 的 `plugins`
 
-- 特殊消息支持
-  - 群聊
-    - [x] @ 消息
-    - [x] 回复消息（转换成@消息）
-  - 频道
-    - [x] @ 消息
-    - [x] 回复消息（转换成@消息）
-  - 未支持的消息已被替换，如： `[图片]`、 `[视频]` 等等
+- 依赖
+    - `websockets`
+    - `tortoise-orm`
 
-# 特别感谢
-- [@SK-415](https://github.com/SK-415) ：感谢SK佬给予许多优秀的建议和耐心的解答。
-- [@zhz-红石头](https://github.com/zhzhongshi) ：感谢红石头在代码上的帮助
-- [NoneBot2](https://github.com/nonebot/nonebot2)： 插件使用的开发框架。
-- [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)： 稳定完善的 CQHTTP 实现。
+## 命令
 
-# 二创
+- 获取已连接至 WebSocket 的 MineCraft服务器
+    - `服务器列表`
 
-- [mcqq服主版](https://github.com/KarisAya/nonebot_plugin_mcqq_server) 采用本地读取log信息的方法的Minecraft Server互通消息的插件
+
+- 动态控制需要互通的群聊
+    - `开启互通 Server1`
+    - `开启互通 Server2`
+    - `关闭互通 Server1`
+    - `关闭互通 Server2`
+
+
+- 获取当前群聊开启互通的服务器
+    - `互通列表`
+
+## 后续功能
+
+- 不同群聊自定义是否发送群聊名称
+
+
+- 不同服务器或不同群聊内的互通列表是否发送服务器名称
+
+
+- 自定义选择通过 `WebSocket` 或 `MCRcon` 发送消息至MC
