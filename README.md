@@ -18,11 +18,15 @@
 
 注意！若使用该版本，请务必对各个MC服务器设置**不同**的服务器名，即使只有一个MC服务器
 
+暂时只支持 **纯插件** 版本的安装方式，不支持 `Rcon`
+
 手动下载该分支 `git` 文件，将 `mcqq_sql` 放入 `Bot` 的 `plugins`
 
-- 依赖
+- 需要手动安装的依赖
     - `websockets`
     - `tortoise-orm`
+
+更多帮助 [正在不断装修的文档](https://17theword.github.io/mc_qq)
 
 ## 命令
 
