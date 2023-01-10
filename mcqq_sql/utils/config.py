@@ -47,3 +47,19 @@ def get_mc_qq_mcrcon_guild_admin_roles() -> list:
         return list(get_driver().config.mc_qq_mcrcon_guild_admin_roles)
     except AttributeError:
         return ["频道主", "管理员"]
+
+
+def get_mc_qq_dir() -> str:
+    """获取 MC_QQ 数据库路径"""
+    try:
+        return str(get_driver().config.mc_qq_dir)
+    except AttributeError:
+        return ""
+
+
+def get_mc_qq_to_me() -> bool:
+    """获取 MC_QQ 数据库路径"""
+    try:
+        return bool(get_driver().config.mc_qq_to_me)
+    except AttributeError:
+        return True

@@ -11,11 +11,12 @@ from ...utils import (
     handle_server_name,
     server_name_check,
     get_type_id,
-    permission_check
+    permission_check,
+    to_me
 )
 
-add_sub = on_command("开启互通", priority=3, block=True)
-add_sub.__doc__ = """开启互通 服务器名"""
+add_sub = on_command("开启互通", rule=to_me(), priority=3, block=True)
+add_sub.__doc__ = """开启互通 Server（群聊丨管理员）"""
 
 add_sub.handle()(permission_check)
 
@@ -30,13 +31,14 @@ async def _(event: Union[GroupMessageEvent, GuildMessageEvent], server_name: str
 
     if isinstance(event, GuildMessageEvent):
         await db.add_guild(
-            guild_id=event.guild_id, channel_id=event.channel_id
+            guild_id=event.guild_id, channel_id=event.channel_id, send_group_name=False
         )
 
     result = await db.add_sub(
         type=event.message_type,
         type_id=await get_type_id(event),
-        server_name=server_name
+        server_name=server_name,
+        display_server_name=False
     )
 
     if result:

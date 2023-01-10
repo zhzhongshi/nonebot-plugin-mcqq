@@ -11,11 +11,12 @@ from ...utils import (
     handle_server_name,
     server_name_check,
     get_type_id,
-    permission_check
+    permission_check,
+    to_me
 )
 
-delete_sub = on_command("关闭互通", priority=3, block=True)
-delete_sub.__doc__ = """关闭互通 服务器名"""
+delete_sub = on_command("关闭互通", rule=to_me(), priority=3, block=True)
+delete_sub.__doc__ = """关闭互通 Server（群聊丨管理员）"""
 
 delete_sub.handle()(permission_check)
 

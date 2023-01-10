@@ -1,19 +1,17 @@
-from typing import Union
-
 from nonebot import on_command
-from nonebot.adapters.onebot.v11 import GroupMessageEvent
-from nonebot_plugin_guild_patch import GuildMessageEvent
+from nonebot.adapters.onebot.v11 import MessageEvent
 
 from .on_msg.data_source import CLIENTS
-from ..utils import permission_check
+from ..utils import permission_check, to_me
 
-connected_servers = on_command("服务器列表", priority=3, block=True)
+connected_servers = on_command("已连接服务器列表", rule=to_me(), priority=3, block=True)
+connected_servers.__doc__ = """已连接服务器列表"""
 
 connected_servers.handle()(permission_check)
 
 
 @connected_servers.handle()
-async def _(event: Union[GroupMessageEvent, GuildMessageEvent]):
+async def _(event: MessageEvent):
     """发送所有已连接至 WebSocket 的服务器"""
     message = "已连接至 WebSocket 的服务器列表\n\n"
 

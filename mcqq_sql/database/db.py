@@ -1,10 +1,22 @@
+from pathlib import Path
 from typing import Optional, List
 
 from nonebot import get_driver
 from tortoise import Tortoise, connections
 from .models import Sub, Server, Group, Guild
+from ..utils.config import get_mc_qq_dir
 
 server_list = []
+
+
+def get_path(*other):
+    """获取数据文件绝对路径"""
+
+    dir_path = Path(get_mc_qq_dir() if get_mc_qq_dir() else "./data/")
+    if not Path(dir_path).exists():
+        dir_path.mkdir()
+    dir_path = dir_path.resolve()
+    return str(dir_path.joinpath(*other))
 
 
 class DB:
@@ -16,7 +28,7 @@ class DB:
         from . import models  # noqa: F401
 
         await Tortoise.init(
-            db_url=f"sqlite://src/mcqq.sqlite3",
+            db_url=f"sqlite://{get_path('mcqq.sqlite3')}",
             modules={"models": [locals()["models"]]},
         )
         await Tortoise.generate_schemas()
@@ -43,10 +55,10 @@ class DB:
         return True
 
     @classmethod
-    async def update_server(cls, server_name: str) -> bool:
-        """更新 Server 信息"""
-        if await cls.get_server(server_name=server_name):
-            await Server.update(server_name=server_name)
+    async def update_server(cls, conf, switch, **kwargs):
+        """更新服务器设置"""
+        if await Server.update(kwargs, **{conf: switch}):
+            await cls.update_server_list()
             return True
         return False
 
@@ -70,6 +82,12 @@ class DB:
         await Group.delete(group_id=type_id)
         return True
 
+    @classmethod
+    async def update_group(cls, group_id, switch):
+        """设置指定群组权限"""
+        if not await Group.update({"group_id": group_id}, send_group_name=switch):
+            await cls.add_group(group_id=group_id, send_group_name=switch)
+
     # 频道 相关操作
     @classmethod
     async def get_guild(cls, **kwargs):
@@ -91,6 +109,13 @@ class DB:
         return True
 
     @classmethod
+    async def update_guild(cls, guild_id, channel_id, switch):
+        """设置指定群组权限"""
+        if not await Guild.update({"guild_id": guild_id, "channel_id": channel_id},
+                                  send_group_name=switch):
+            await cls.add_guild(guild_id=guild_id, channel_id=channel_id, send_group_name=switch)
+
+    @classmethod
     async def get_guild_type_id(cls, guild_id, channel_id) -> Optional[int]:
         """获取频道订阅 ID"""
         guild = await Guild.get(guild_id=guild_id, channel_id=channel_id).first()
@@ -105,18 +130,25 @@ class DB:
     @classmethod
     async def add_sub(cls, *, server_name, **kwargs) -> bool:
         """添加互通服务器"""
-        if not await Sub.add(type=kwargs["type"], type_id=kwargs["type_id"], server_name=server_name):
+        if not await Sub.add(server_name=server_name, **kwargs):
             return False
         if kwargs["type"] == "group":
-            await cls.add_group(group_id=kwargs["type_id"])
-        await cls.add_server(server_name=server_name)
+            await cls.add_group(group_id=kwargs["type_id"], send_group_name=False)
+        await cls.add_server(
+            server_name=server_name,
+            rcon_ip="127.0.0.1",
+            rcon_port=25575,
+            rcon_password="change_password",
+            rcon_msg=False,
+            rcon_cmd=False
+        )
         await cls.update_server_list()
         return True
 
     @classmethod
-    async def set_sub(cls, **kwargs):
+    async def set_sub(cls, conf, switch, **kwargs):
         """开关互通设置"""
-        return await Sub.update(**kwargs)
+        return await Sub.update(kwargs, **{conf: switch})
 
     @classmethod
     async def delete_sub(cls, server_name, type, type_id) -> bool:
@@ -154,18 +186,23 @@ class DB:
             server_list.append(
                 {
                     "server_name": server.server_name,
-                    "group_list": [],
-                    "guild_list": []
+                    "all_group_list": [],
+                    "rcon_msg": server.rcon_msg,
+                    "rcon_cmd": server.rcon_cmd,
                 }
             )
 
         for per_server in server_list:
             async for sub in subs:
                 if per_server["server_name"] == sub.server_name:
-                    if sub.type == "group":
-                        per_server["group_list"].append(sub.type_id)
-                    elif sub.type == "guild":
-                        per_server["guild_list"].append(sub.type_id)
+                    # 向全群聊列表里装入每个互通记录
+                    per_server["all_group_list"].append(
+                        {
+                            "type": sub.type,
+                            "type_id": sub.type_id,
+                            "display_server_name": sub.display_server_name
+                        }
+                    )
 
 
 get_driver().on_startup(DB.init)

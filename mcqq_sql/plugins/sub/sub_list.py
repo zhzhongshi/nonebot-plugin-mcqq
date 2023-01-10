@@ -8,11 +8,12 @@ from ...database import DB as db
 
 from ...utils import (
     get_type_id,
-    permission_check
+    permission_check,
+    to_me
 )
 
-sub_list = on_command("互通列表", priority=3, block=True)
-sub_list.__doc__ = """互通列表"""
+sub_list = on_command("互通列表", rule=to_me(), priority=3, block=True)
+sub_list.__doc__ = """互通列表（群聊丨管理员）"""
 
 sub_list.handle()(permission_check)
 
@@ -26,6 +27,8 @@ async def _(event: Union[GroupMessageEvent, GuildMessageEvent]):
     for sub in subs:
         server = await db.get_server(server_name=sub.server_name)
         assert server is not None
-        message += f"{server.server_name}\n"
-
+        message += (
+            f"{sub.server_name} "
+            f"显示服务器名：{'开' if sub.display_server_name else '关'}，"
+        )
     await sub_list.finish(message)
