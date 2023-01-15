@@ -8,7 +8,7 @@ from nonebot_plugin_guild_patch import GuildMessageEvent
 from ...database import DB as db
 from ...utils import get_type_id, permission_check, handle_server_name, server_name_check, to_me
 
-display_off = on_command("关闭服务器名", rule=to_me(), priority=3, block=True)
+display_off = on_command("关闭服务器名", rule=to_me(), priority=3)
 display_off.__doc__ = """关闭服务器名 Server（管理员）"""
 
 display_off.handle()(permission_check)

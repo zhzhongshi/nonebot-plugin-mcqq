@@ -12,7 +12,7 @@ from ...utils import (
     to_me
 )
 
-sub_list = on_command("互通列表", rule=to_me(), priority=3, block=True)
+sub_list = on_command("互通列表", rule=to_me(), priority=3)
 sub_list.__doc__ = """互通列表（群聊丨管理员）"""
 
 sub_list.handle()(permission_check)

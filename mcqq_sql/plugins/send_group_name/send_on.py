@@ -7,7 +7,7 @@ from nonebot_plugin_guild_patch import GuildMessageEvent
 from ...database import DB as db
 from ...utils import permission_check, to_me
 
-send_on = on_command("开启发送群名", rule=to_me(), priority=3, block=True)
+send_on = on_command("开启发送群名", rule=to_me(), priority=3)
 send_on.__doc__ = """开启发送群名（群聊丨管理员）"""
 
 send_on.handle()(permission_check)

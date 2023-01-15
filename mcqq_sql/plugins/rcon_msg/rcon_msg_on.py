@@ -6,7 +6,7 @@ from ..rcon import change_rcon_status
 from ...database import DB as db
 from ...utils import permission_check, handle_server_name, server_name_check, to_me
 
-rcon_msg_on = on_command("开启rcon消息", rule=to_me(), priority=3, block=True)
+rcon_msg_on = on_command("开启rcon消息", rule=to_me(), priority=3)
 rcon_msg_on.__doc__ = """开启rcon消息 Server（管理员）"""
 
 rcon_msg_on.handle()(permission_check)

@@ -3,7 +3,7 @@ from nonebot.matcher import matchers
 
 from ..utils import to_me
 
-help = on_command("mcqq帮助", aliases={"MCQQ帮助"}, rule=to_me(), priority=3, block=True)
+help = on_command("mcqq帮助", aliases={"MCQQ帮助"}, rule=to_me(), priority=3)
 
 
 @help.handle()

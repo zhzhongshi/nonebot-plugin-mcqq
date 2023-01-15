@@ -15,7 +15,7 @@ from ...utils import (
     to_me
 )
 
-delete_sub = on_command("关闭互通", rule=to_me(), priority=3, block=True)
+delete_sub = on_command("关闭互通", rule=to_me(), priority=3)
 delete_sub.__doc__ = """关闭互通 Server（群聊丨管理员）"""
 
 delete_sub.handle()(permission_check)

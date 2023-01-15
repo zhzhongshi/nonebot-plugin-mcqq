@@ -8,7 +8,7 @@ from nonebot_plugin_guild_patch import GuildMessageEvent
 from ...database import DB as db
 from ...utils import get_type_id, permission_check, handle_server_name, server_name_check, to_me
 
-display_on = on_command("开启服务器名", rule=to_me(), priority=3, block=True)
+display_on = on_command("开启服务器名", rule=to_me(), priority=3)
 display_on.__doc__ = """开启服务器名 Server（管理员）"""
 
 display_on.handle()(permission_check)

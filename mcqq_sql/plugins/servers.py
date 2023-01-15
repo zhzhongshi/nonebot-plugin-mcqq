@@ -4,7 +4,7 @@ from nonebot.adapters.onebot.v11 import MessageEvent
 from ..database.models import Server
 from ..utils import permission_check, to_me
 
-servers = on_command("服务器列表", rule=to_me(), priority=3, block=True)
+servers = on_command("服务器列表", rule=to_me(), priority=3)
 
 servers.handle()(permission_check)
 
