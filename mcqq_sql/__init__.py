@@ -1,5 +1,5 @@
 from nonebot import get_driver
-from .utils.ws_server import start_ws_server, stop_ws_server, start_rcon_connect
+from .utils.ws_server import start_ws_server, stop_ws_server
 from . import plugins
 
 driver = get_driver()
@@ -10,7 +10,6 @@ driver = get_driver()
 async def on_start():
     # 启动 WebSocket 服务器
     await start_ws_server()
-    await start_rcon_connect()
 
 
 # Bot 断开时

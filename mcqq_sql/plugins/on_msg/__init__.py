@@ -10,8 +10,7 @@ mc_qq = on_message(priority=5, rule=msg_rule, block=False)
 mc_qq_command = on_command(
     "mcc",
     priority=3,
-    rule=msg_rule,
-    block=True
+    rule=msg_rule
 )
 mc_qq_command.handle()(permission_check)
 

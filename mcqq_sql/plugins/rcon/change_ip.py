@@ -5,7 +5,7 @@ from nonebot.adapters.onebot.v11 import PrivateMessageEvent
 from ...database import DB as db
 from ...utils import handle_server_name, server_name_check, to_me
 
-change_ip = on_command("修改rconip", rule=to_me(), permission=SUPERUSER, priority=3, block=True)
+change_ip = on_command("修改rconip", rule=to_me(), permission=SUPERUSER, priority=3)
 change_ip.__doc__ = """修改rconip Server IP（私聊丨超级用户）"""
 
 change_ip.handle()(handle_server_name)
